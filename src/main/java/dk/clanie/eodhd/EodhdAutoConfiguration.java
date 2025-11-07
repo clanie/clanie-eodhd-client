@@ -18,15 +18,17 @@
 package dk.clanie.eodhd;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 
 import dk.clanie.web.WebClientFactory;
 
+/**
+ * {@link EnableAutoConfiguration Auto-configuration} for clanie-eodhd-client.
+ */
 @AutoConfiguration
-@ConditionalOnClass({EodhdClient.class, WebClientFactory.class})
 @ConditionalOnProperty(prefix = "eodhd", name = {"url", "apiToken"})
 public class EodhdAutoConfiguration {
 
