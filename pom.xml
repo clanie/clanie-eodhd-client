@@ -44,7 +44,7 @@
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
 
-
+        <!-- Miscellaneous -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
