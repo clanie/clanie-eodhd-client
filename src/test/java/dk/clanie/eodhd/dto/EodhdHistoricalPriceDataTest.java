@@ -7,18 +7,14 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import dk.clanie.eodhd.dto.EodhdHistoricalPriceData;
+import tools.jackson.databind.json.JsonMapper;
 
 class EodhdHistoricalPriceDataTest {
 
 
 	@Test
 	void testDeserialization() throws IOException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
+		JsonMapper objectMapper = new JsonMapper();
 		EodhdHistoricalPriceData[] values = objectMapper.readValue("""
 				[
 				    {

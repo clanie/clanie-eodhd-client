@@ -49,12 +49,12 @@
             <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
 
-        <!-- Miscellaneous -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
+        <!-- Compile time dependenciesv-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
 		<!-- Test dependencies -->
 		<dependency>
