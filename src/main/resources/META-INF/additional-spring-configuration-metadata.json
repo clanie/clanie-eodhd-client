@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "eodhd.apiToken",
+    "type": "java.lang.String",
+    "description": "API token for EOD Historical Data"
+  },
+  {
+    "name": "eodhd.url",
+    "type": "java.lang.String",
+    "description": "Base URL for EOD Historical Data"
+  },
+  {
+    "name": "eodhd.wiretap",
+    "type": "java.lang.Boolean",
+    "description": "Log all data sent to and received from EOD Historical Data'"
+  }
+]}
