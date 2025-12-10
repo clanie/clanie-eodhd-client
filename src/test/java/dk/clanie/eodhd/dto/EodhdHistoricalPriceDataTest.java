@@ -27,8 +27,6 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import dk.clanie.eodhd.dto.EodhdHistoricalPriceData;
-
 class EodhdHistoricalPriceDataTest {
 
 	@Test
