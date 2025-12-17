@@ -21,14 +21,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
 
 class EodhdExchangeSymbolDataTest {
 
 	@Test
-	void testDeserialization() throws JsonMappingException, JsonProcessingException {
+	void testDeserialization() throws DatabindException, JacksonException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		EodhdExchangeSymbolData[] values = objectMapper.readValue("""
 				[

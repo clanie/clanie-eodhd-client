@@ -23,15 +23,15 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
 
 class EodhdExchangeDataTest {
 
 	@Test
-	void testJsonDeserialization() throws JsonMappingException, JsonProcessingException {
+	void testJsonDeserialization() throws DatabindException, JacksonException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<EodhdExchangeData> value = objectMapper.readValue("""
 				[

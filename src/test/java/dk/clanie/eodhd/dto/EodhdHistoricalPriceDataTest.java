@@ -24,15 +24,13 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.databind.ObjectMapper;
 
 class EodhdHistoricalPriceDataTest {
 
 	@Test
 	void testDeserialization() throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
 		EodhdHistoricalPriceData[] values = objectMapper.readValue("""
 				[
 				    {
