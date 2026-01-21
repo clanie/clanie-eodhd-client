@@ -30,6 +30,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import dk.clanie.eodhd.dto.EodhdExchangeData;
 import dk.clanie.eodhd.dto.EodhdExchangeSymbolData;
 import dk.clanie.eodhd.dto.EodhdHistoricalPriceData;
+import dk.clanie.eodhd.dto.EodhdIdMappingData;
+import dk.clanie.eodhd.dto.EodhdIdMappingResponse;
 import dk.clanie.web.WebClientFactory;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -136,6 +138,90 @@ public class EodhdClient {
 				.bodyToFlux(EodhdHistoricalPriceData.class)
 				.collectList()
 				.block();
+	}
+
+
+	/**
+	 * ID Mapping API - maps between exchange symbols and financial identifiers.
+	 * <p>
+	 * Supports bidirectional mapping:
+	 * <ul>
+	 *   <li>Symbol (format: SYMBOL.EXCHANGE) → identifiers (CUSIP, ISIN, FIGI, LEI, CIK)</li>
+	 *   <li>Identifier(s) → Symbol</li>
+	 * </ul>
+	 * <p>
+	 * Multiple filters can be combined for more specific results.
+	 * The API uses pagination with default limit of 100 results.
+	 * <p>
+	 * Example usage:
+	 * <pre>
+	 * // Get identifiers for Apple stock (note: symbol must include exchange)
+	 * List&lt;EodhdIdMappingData&gt; data = client.idMapping(
+	 *     IdMappingQuery.builder()
+	 *         .symbol("AAPL.US")
+	 *         .build()
+	 * );
+	 * 
+	 * // Find symbol by ISIN
+	 * List&lt;EodhdIdMappingData&gt; data = client.idMapping(
+	 *     IdMappingQuery.builder()
+	 *         .isin("US0378331005")
+	 *         .build()
+	 * );
+	 * 
+	 * // Combine multiple filters with custom pagination
+	 * List&lt;EodhdIdMappingData&gt; data = client.idMapping(
+	 *     IdMappingQuery.builder()
+	 *         .isin("US0378331005")
+	 *         .limit(50)
+	 *         .offset(0)
+	 *         .build()
+	 * );
+	 * </pre>
+	 * 
+	 * @param query the ID mapping query with filter criteria
+	 * @return list of matching ID mapping data (may be empty if no matches found)
+	 */
+	public List<EodhdIdMappingData> idMapping(IdMappingQuery query) {
+		EodhdIdMappingResponse response = wc.get()
+				.uri(uriBuilder -> {
+					uriBuilder.path("/id-mapping");
+					query.applyTo(uriBuilder);
+					return uriBuilder.build();
+				})
+				.retrieve()
+				.bodyToMono(EodhdIdMappingResponse.class)
+				.block();
+		return response != null ? response.getData() : List.of();
+	}
+
+
+	/**
+	 * Convenience method to get all identifiers for a given symbol.
+	 * <p>
+	 * The symbol parameter can include the exchange code in the format: SYMBOL.EXCHANGE
+	 * (e.g., "AAPL.US", "MSFT.US", "BP.LSE")
+	 * 
+	 * @param symbolWithExchange the symbol with optional exchange code (e.g., "AAPL.US")
+	 * @return list of matching ID mapping data
+	 */
+	public List<EodhdIdMappingData> getIdentifiersForSymbol(String symbolWithExchange) {
+		return idMapping(IdMappingQuery.builder()
+				.symbol(symbolWithExchange)
+				.build());
+	}
+
+
+	/**
+	 * Convenience method to find exchange symbols by ISIN.
+	 * 
+	 * @param isin the ISIN identifier
+	 * @return list of matching ID mapping data
+	 */
+	public List<EodhdIdMappingData> findSymbolByIsin(String isin) {
+		return idMapping(IdMappingQuery.builder()
+				.isin(isin)
+				.build());
 	}
 
 
