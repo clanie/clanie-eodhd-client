@@ -32,23 +32,23 @@ import lombok.Value;
 public class EodhdHistoricalPriceData {
 
 	LocalDate date;
-	double open;
-	double high;
-	double low;
-	double close;
-	double adjustedClose;
-	long volume;
+	Double open;
+	Double high;
+	Double low;
+	Double close;
+	Double adjustedClose;
+	Long volume;
 
 
 	@JsonCreator
     public EodhdHistoricalPriceData(
         @JsonProperty("date") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate date,
-        @JsonProperty("open") double open,
-        @JsonProperty("high") double high,
-        @JsonProperty("low") double low,
-        @JsonProperty("close") double close,
-        @JsonProperty("adjusted_close") double adjustedClose,
-        @JsonProperty("volume") long volume) {
+        @JsonProperty("open") Double open,
+        @JsonProperty("high") Double high,
+        @JsonProperty("low") Double low,
+        @JsonProperty("close") Double close,
+        @JsonProperty("adjusted_close") Double adjustedClose,
+        @JsonProperty("volume") Long volume) {
 		this.date = date;
 		this.open = open;
 		this.high = high;
