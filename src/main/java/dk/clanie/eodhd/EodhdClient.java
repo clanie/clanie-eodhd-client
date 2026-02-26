@@ -133,7 +133,7 @@ public class EodhdClient {
 				.uri(uriBuilder -> uriBuilder.path("/eod/{symbol}.{exchangeCode}")
 						.queryParam("from", from)
 						.queryParam("to", to)
-						.build(symbolCode, exchangeCode))
+						.build(symbolCode, normalizedExchangeCode(exchangeCode)))
 				.retrieve()
 				.bodyToFlux(EodhdHistoricalPriceData.class)
 				.collectList()
@@ -222,6 +222,16 @@ public class EodhdClient {
 		return idMapping(IdMappingQuery.builder()
 				.isin(isin)
 				.build());
+	}
+
+
+	private String normalizedExchangeCode(String exchangeCode) {
+		return switch (exchangeCode) {
+		case  "AMEX", "ARCA", "BATS", "NASDAQ", "NYSE", "NYSE MKT","OTC", "PINK", "XASE", "XNAS", "XNYS"  -> "US";
+		case "XLON" -> "LSE";
+		case "XCSE" -> "CPH";
+		default -> exchangeCode;
+		};
 	}
 
 

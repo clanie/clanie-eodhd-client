@@ -17,6 +17,9 @@
  */
 package dk.clanie.eodhd.dto;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import tools.jackson.databind.PropertyNamingStrategies;
@@ -36,6 +39,8 @@ public class EodhdExchangeData {
 	 * internationally recognized code, defined by ISO 10383, that uniquely
 	 * identifies the specific trading venue or stock exchange where securities
 	 * transactions occur.
+	 * 
+	 * May contain a comma-separated list of MICs, e.g. "XNAS, XNYS, OTCM".
 	 */
 	String operatingMIC;
 
@@ -62,6 +67,33 @@ public class EodhdExchangeData {
 		this.currency = currency;
 		this.countryISO2 = countryISO2;
 		this.countryISO3 = countryISO3;
+	}
+
+
+	/**
+	 * Creates a stream of EodhdExchangeData copies, one per Operating MIC.
+	 * <p>
+	 * Since the operatingMIC field may contain a comma-separated list of MICs,
+	 * this method splits them and creates a separate copy of this object for each MIC.
+	 * If operatingMIC is null or empty, returns a stream with a single copy.
+	 * 
+	 * @return Stream of EodhdExchangeData, one per individual Operating MIC
+	 */
+	public Stream<EodhdExchangeData> streamCopyPerOperatingMic() {
+		if (operatingMIC == null || operatingMIC.isBlank()) {
+			return Stream.of(this);
+		}
+		
+		return Arrays.stream(operatingMIC.split("\\s*,\\s*"))
+				.map(mic -> new EodhdExchangeData(
+						name,
+						code,
+						mic.trim(),
+						country,
+						currency,
+						countryISO2,
+						countryISO3
+				));
 	}
 
 
