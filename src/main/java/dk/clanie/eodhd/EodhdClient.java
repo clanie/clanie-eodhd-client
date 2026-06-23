@@ -27,6 +27,8 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import io.micrometer.core.instrument.Metrics;
+
 import dk.clanie.eodhd.dto.EodhdExchangeData;
 import dk.clanie.eodhd.dto.EodhdExchangeSymbolData;
 import dk.clanie.eodhd.dto.EodhdHistoricalPriceData;
@@ -58,7 +60,16 @@ public class EodhdClient {
 	public void init() {
 		wc = webClientFactory.newWebClient(baseUrl, builder -> {
 			builder.filter(authorizationFilter());
+			builder.filter(callCountingFilter());
 		}, wiretap);
+	}
+
+
+	private static ExchangeFilterFunction callCountingFilter() {
+		return ExchangeFilterFunction.ofRequestProcessor(cr -> {
+			Metrics.globalRegistry.counter("eodhd.api.calls").increment();
+			return Mono.just(cr);
+		});
 	}
 
 

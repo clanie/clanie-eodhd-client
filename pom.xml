@@ -52,6 +52,12 @@
             <artifactId>spring-boot-starter-webclient</artifactId>
         </dependency>
 
+        <!-- Metrics -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+        </dependency>
+
         <!-- Miscellaneous -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
