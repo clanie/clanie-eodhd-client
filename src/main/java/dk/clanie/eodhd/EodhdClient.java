@@ -18,14 +18,18 @@
 package dk.clanie.eodhd;
 
 import java.net.URI;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import reactor.netty.http.client.HttpClient;
 
 import io.micrometer.core.instrument.Metrics;
 
@@ -53,12 +57,20 @@ public class EodhdClient {
 	@Value("${eodhd.wiretap:false}")
 	private boolean wiretap;
 
+	@Value("${eodhd.responseTimeout:PT2M}")
+	private Duration responseTimeout;
+
 	private WebClient wc;
 
 
 	@PostConstruct
 	public void init() {
 		wc = webClientFactory.newWebClient(baseUrl, builder -> {
+			HttpClient httpClient = HttpClient.create()
+					.followRedirect(false)
+					.wiretap(wiretap)
+					.responseTimeout(responseTimeout);
+			builder.clientConnector(new ReactorClientHttpConnector(httpClient));
 			builder.filter(authorizationFilter());
 			builder.filter(callCountingFilter());
 		}, wiretap);
